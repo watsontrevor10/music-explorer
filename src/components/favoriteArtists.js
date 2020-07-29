@@ -1,5 +1,7 @@
 import React from "react"
 import { graphql, useStaticQuery } from "gatsby"
+import Img from "gatsby-image"
+import styled from "styled-components"
 
 const FavoriteArtists = () => {
   const data = useStaticQuery(graphql`
@@ -13,14 +15,16 @@ const FavoriteArtists = () => {
             name
             time_range
             popularity
+            order
+            genres
             followers {
               total
             }
-            order
             image {
               localFile {
                 childImageSharp {
                   fluid(maxWidth: 400) {
+                    ...GatsbyImageSharpFluid
                     originalName
                   }
                 }
@@ -36,26 +40,60 @@ const FavoriteArtists = () => {
 
   return (
     <>
+    <Heading>
+
       <h1>Favorite Artists</h1>
       <h2>In the Last 6 Months</h2>
+    </Heading>
       <hr />
-      <div
-        style={{
-          display: "flex",
-          flexGrow: "4",
-          flexWrap: "column wrap",
-          justifyContent: "space-between"
-        }}
-      >
+      <MainContainer>
         {data.allSpotifyTopArtist.edges.map(artist => (
-          <div style={{ backgroundColor: "#282828", width: "250px" }}>
-            <h2>{artist.node.name}</h2>
-            <p>{artist.node.popularity}</p>
-          </div>
+          <ContentContainer>
+            <ImageContainer>
+              <Img fluid={artist.node.image.localFile.childImageSharp.fluid} />
+            </ImageContainer>
+            <TextContainer>
+              <h3>{artist.node.name}</h3>
+              {/* <p>Popularity: {artist.node.popularity}</p>
+              <p>Followers: {artist.node.followers.total}</p> */}
+              {/* <p>Genres: {artist.node.genres}</p> */}
+            </TextContainer>
+          </ContentContainer>
         ))}
-      </div>
+      </MainContainer>
     </>
   )
 }
+
+const Heading = styled.div`
+  text-align: center;
+`
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+`
+
+const ContentContainer = styled.div`
+  margin: 0 auto;
+  width: 12em;
+`
+
+const ImageContainer = styled.div`
+  width: 100%;
+  margin-bottom: 10px;
+  break-inside: avoid-column;
+`
+
+const Image = styled(Img)`
+  width: 100% !important;
+`
+
+const TextContainer = styled.div`
+  margin: 0 auto;
+  text-align: center;
+`
 
 export default FavoriteArtists

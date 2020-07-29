@@ -30,6 +30,12 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        // Add any options here
+      },
+    },
+    {
       resolve: `gatsby-source-spotify`,
       options: {
         clientId: process.env.CLIENT_ID,
