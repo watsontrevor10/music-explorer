@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,
@@ -25,6 +27,19 @@ module.exports = {
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: `gatsby-source-spotify`,
+      options: {
+        clientId: "0193404d0c7d4e1aa377ca97773a1d8c",
+        // process.env.CLIENT_ID
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+    
+        fetchPlaylists: true, // optional. Set to false to disable fetching of your playlists
+        fetchRecent: true, // optional. Set to false to disable fetching of your recently played tracks
+        timeRanges: ['short_term', 'medium_term', 'long_term'], // optional. Set time ranges to be fetched
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
