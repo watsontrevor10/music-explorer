@@ -2,9 +2,9 @@ require('dotenv').config();
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Trevor's Music Explorer`,
+    description: `I listen to a lot of music, here are the things I'm listening to.`,
+    author: `Trevor Watson`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -32,8 +32,7 @@ module.exports = {
     {
       resolve: `gatsby-source-spotify`,
       options: {
-        clientId: "0193404d0c7d4e1aa377ca97773a1d8c",
-        // process.env.CLIENT_ID
+        clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         refreshToken: process.env.REFRESH_TOKEN,
     

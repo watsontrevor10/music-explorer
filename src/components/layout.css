@@ -2,6 +2,7 @@ html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  background-color: #121212;
 }
 body {
   margin: 0;
@@ -199,7 +200,7 @@ html {
   box-sizing: inherit;
 }
 body {
-  color: hsla(0, 0%, 0%, 0.8);
+  color: #ffffff;
   font-family: georgia, serif;
   font-weight: normal;
   word-wrap: break-word;
