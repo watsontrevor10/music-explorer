@@ -18,7 +18,6 @@ export const ContentContainer = styled.div`
 
 export const EmbedContainer = styled.div`
   margin: 0 auto;
-  
 `
 
 export const ImageContainer = styled.div`
