@@ -1,5 +1,6 @@
 import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import Img from "gatsby-image"
 
 const ListeningNow = () => {
   const data = useStaticQuery(graphql`
@@ -26,14 +27,19 @@ const ListeningNow = () => {
     }
   `)
 
-  console.log(data)
-
   return (
     <>
       <h3>Recent Listens</h3>
-      {data.allSpotifyRecentTrack.edges.map(track => (
-        <p>{track.node.track.name}</p>
-      ))}
+      <div>
+        {data.allSpotifyRecentTrack.edges.map((track, i) => (
+          <div key={i}>
+            <Img
+              fluid={track.node.track.image.localFile.childImageSharp.fluid}
+            />
+            <p>{track.node.track.name}</p>
+          </div>
+        ))}
+      </div>
     </>
   )
 }

@@ -2,6 +2,7 @@ import React from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
+import { Heading, MainContainer, ContentContainer, ImageContainer } from "../styles/mainStyles"
 
 const FavoriteArtists = () => {
   const data = useStaticQuery(graphql`
@@ -36,21 +37,18 @@ const FavoriteArtists = () => {
     }
   `)
 
-  console.log(data)
-
   return (
     <>
     <Heading>
-
       <h1>Favorite Artists</h1>
       <h2>In the Last 6 Months</h2>
     </Heading>
       <hr />
       <MainContainer>
-        {data.allSpotifyTopArtist.edges.map(artist => (
-          <ContentContainer>
+        {data.allSpotifyTopArtist.edges.map((artist, i) => (
+          <ContentContainer key={i}>
             <ImageContainer>
-              <Img fluid={artist.node.image.localFile.childImageSharp.fluid} />
+              <Image fluid={artist.node.image.localFile.childImageSharp.fluid} />
             </ImageContainer>
             <TextContainer>
               <h3>{artist.node.name}</h3>
@@ -65,27 +63,27 @@ const FavoriteArtists = () => {
   )
 }
 
-const Heading = styled.div`
-  text-align: center;
-`
+// const Heading = styled.div`
+//   text-align: center;
+// `
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  width: 100%;
-`
+// const MainContainer = styled.div`
+//   display: flex;
+//   flex-flow: row wrap;
+//   justify-content: center;
+//   width: 100%;
+// `
 
-const ContentContainer = styled.div`
-  margin: 0 auto;
-  width: 12em;
-`
+// const ContentContainer = styled.div`
+//   margin: 0 auto;
+//   width: 12em;
+// `
 
-const ImageContainer = styled.div`
-  width: 100%;
-  margin-bottom: 10px;
-  break-inside: avoid-column;
-`
+// const ImageContainer = styled.div`
+//   width: 100%;
+//   margin-bottom: 10px;
+//   break-inside: avoid-column;
+// `
 
 const Image = styled(Img)`
   width: 100% !important;
