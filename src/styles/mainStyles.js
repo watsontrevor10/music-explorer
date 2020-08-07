@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 export const Heading = styled.div`
   text-align: center;
+  margin-top: 2em;
 `
 
 export const MainContainer = styled.div`
@@ -17,7 +18,9 @@ export const ContentContainer = styled.div`
 `
 
 export const EmbedContainer = styled.div`
-  margin: 0 auto;
+  margin: auto;
+  text-align: center;
+
 `
 
 export const ImageContainer = styled.div`

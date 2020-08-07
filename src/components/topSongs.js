@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import styled from "styled-components"
-import { FaPlayCircle } from "react-icons/fa"
+import { FaRegPlayCircle } from "react-icons/fa"
 import { IconContext } from "react-icons"
 import {
   Heading,
@@ -15,6 +15,7 @@ const TopSongs = () => {
   const data = useStaticQuery(graphql`
     query TopSongs {
       allSpotifyTopTrack(
+        limit: 10
         sort: { fields: order, order: ASC }
         filter: { time_range: { eq: "short_term" } }
       ) {
@@ -52,7 +53,7 @@ const TopSongs = () => {
   console.log(songNode)
   // grabs the song ID at the end of the spotifyId to be used at the end of embedUrl.
   // short_term = substr(12), medium_term = substr(13), long_term = substr(11)
-  const [subNum, setSubNum] = useState(() => {
+  const initialSubNum = () => {
     if (songNode[0].node.spotifyId.includes("long")) {
       return 11
     } else if (songNode[0].node.spotifyId.includes("medium")) {
@@ -60,7 +61,8 @@ const TopSongs = () => {
     } else {
       return 12
     }
-  })
+  }
+  const [subNum, setSubNum] = useState(initialSubNum)
   const [songId, setSongId] = useState(
     songNode[0].node.spotifyId.substr(subNum)
   )
@@ -74,7 +76,7 @@ const TopSongs = () => {
       <EmbedContainer>
         <iframe
           src={embedUrl + songId}
-          width="300"
+          width="500"
           height="85"
           frameBorder="0"
           allowtransparency="true"
@@ -82,7 +84,7 @@ const TopSongs = () => {
         ></iframe>
       </EmbedContainer>
       {/* Loops through all of the top songs listened to */}
-      <div>
+      <PlaylistContainer>
         {data.allSpotifyTopTrack.edges.map((song, i) => {
           const sNode = song.node
           return (
@@ -91,10 +93,11 @@ const TopSongs = () => {
               <TrackContainer
                 onClick={() => setSongId(sNode.spotifyId.substr(subNum))}
               >
-                <IconContext.Provider value={{size: "3em"}}>
-                  <div>
-                  <FaPlayCircle />
-                  </div>
+                <IconContext.Provider value={{ size: "2.5em" }}>
+                  <IconContainer>
+                    {/* <h1>{sNode.order + 1}</h1> */}
+                    <FaRegPlayCircle />
+                  </IconContainer>
                 </IconContext.Provider>
               </TrackContainer>
               <NameContainer>
@@ -104,18 +107,25 @@ const TopSongs = () => {
             </SongContainer>
           )
         })}
-      </div>
+      </PlaylistContainer>
     </>
   )
 }
 
+const PlaylistContainer = styled.div`
+  display: flex;
+  flex-flow: column wrap;
+  max-height: 500px;
+  align-items: center;
+`
+
 const SongContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  align-content: flex-start;
-  /* margin: 5px; */
+  flex-flow: row wrap;
+  justify-content: center;
   max-width: 400px;
   background-color: #040404;
+  border-top: 1px solid gray;
 `
 
 const TrackContainer = styled.button`
@@ -127,8 +137,14 @@ const TrackContainer = styled.button`
 `
 
 const NameContainer = styled.div`
-  width: 2000px;
+  width: 300px;
   padding: 10px;
+`
+
+const IconContainer = styled.div`
+  padding: 1em;
+  margin-top: 0.4em;
+  /* background-color: blue; */
 `
 
 export default TopSongs
