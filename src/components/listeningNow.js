@@ -1,45 +1,31 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import axios from "axios"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
 
 const ListeningNow = () => {
-  const data = useStaticQuery(graphql`
-    query RecentTracks {
-      allSpotifyRecentTrack(limit: 10) {
-        edges {
-          node {
-            track {
-              artistString
-              name
-              image {
-                localFile {
-                  childImageSharp {
-                    fluid(maxWidth: 400) {
-                      originalImg
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
+  const [song, setSong] = useState(null)
+
+  useEffect(() => {
+    axios
+      .get(`https://api.spotify.com/v1/me/top/tracks`, {
+        headers: {
+          Authorization: `Bearer ${process.env.CLIENT_SECRET}`,
+        },
+      })
+      .then(res => {
+        setSong(res.data)
+        console.log("Set Data")
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
 
   return (
     <>
       <h3>Recent Listens</h3>
-      <div>
-        {data.allSpotifyRecentTrack.edges.map((track, i) => (
-          <div key={i}>
-            <Img
-              fluid={track.node.track.image.localFile.childImageSharp.fluid}
-            />
-            <p>{track.node.track.name}</p>
-          </div>
-        ))}
-      </div>
+      <div></div>
     </>
   )
 }

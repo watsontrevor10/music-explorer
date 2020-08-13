@@ -3,26 +3,18 @@ import { useStaticQuery, graphql } from "gatsby"
 import styled from "styled-components"
 import { FaRegPlayCircle } from "react-icons/fa"
 import { IconContext } from "react-icons"
-import {
-  Heading,
-  MainContainer,
-  EmbedContainer,
-  ImageContainer,
-} from "../styles/mainStyles"
+import { Heading, EmbedContainer } from "../styles/mainStyles"
 
 // queries data from Spotify filtered (short_term = last 4 weeks, medium_term = last 6 months, long_term = all data) sorted according to listen order
 const TopSongs = () => {
   const data = useStaticQuery(graphql`
     query TopSongs {
-      allSpotifyTopTrack(
-        limit: 10
-        sort: { fields: order, order: ASC }
-        filter: { time_range: { eq: "short_term" } }
-      ) {
+      allSpotifyTopTrack(sort: { fields: order, order: ASC }) {
         edges {
           node {
             name
             spotifyId
+            time_range
             album {
               name
             }
@@ -50,7 +42,7 @@ const TopSongs = () => {
   const embedUrl = "https://open.spotify.com/embed/track/"
   // destructuring graphql data to simplify and make code more DRY
   const songNode = data.allSpotifyTopTrack.edges
-  console.log(songNode)
+
   // grabs the song ID at the end of the spotifyId to be used at the end of embedUrl.
   // short_term = substr(12), medium_term = substr(13), long_term = substr(11)
   const initialSubNum = () => {
@@ -62,10 +54,21 @@ const TopSongs = () => {
       return 12
     }
   }
+  const [timeRange, setTimeRange] = useState("short_term")
   const [subNum, setSubNum] = useState(initialSubNum)
   const [songId, setSongId] = useState(
     songNode[0].node.spotifyId.substr(subNum)
   )
+
+  const filteredList = data.allSpotifyTopTrack.edges.filter(range =>
+    range.node.time_range.includes(timeRange)
+  )
+  console.log(filteredList)
+
+  const rangeSelector = e => {
+    console.log(e)
+    setTimeRange(e.target.value)
+  }
 
   return (
     <>
@@ -83,9 +86,18 @@ const TopSongs = () => {
           allow="encrypted-media"
         ></iframe>
       </EmbedContainer>
+      {/* Time Range selector */}
+      <div>
+        <label for="range">Time Range</label>
+        <select name="range" id="range" onChange={(e) => setTimeRange(e.target.value)}>
+          <option value="short_term">4 Weeks</option>
+          <option value="medium_term">6 Months</option>
+          <option value="long_term">All Time</option>
+        </select>
+      </div>
       {/* Loops through all of the top songs listened to */}
       <PlaylistContainer>
-        {data.allSpotifyTopTrack.edges.map((song, i) => {
+        {filteredList.map((song, i) => {
           const sNode = song.node
           return (
             // Container set as a button, when clicked changes songId to be the new song
@@ -113,13 +125,22 @@ const TopSongs = () => {
 }
 
 const PlaylistContainer = styled.div`
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: webkit-flex;
   display: flex;
   flex-flow: column wrap;
   max-height: 500px;
+  max-width: 900px;
   align-items: center;
 `
 
 const SongContainer = styled.div`
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: webkit-flex;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -134,6 +155,11 @@ const TrackContainer = styled.button`
   color: inherit;
   margin: auto;
   max-width: 300px;
+  transition: 500ms;
+  :hover {
+    cursor: pointer;
+    color: #1db954;
+  }
 `
 
 const NameContainer = styled.div`
@@ -144,7 +170,6 @@ const NameContainer = styled.div`
 const IconContainer = styled.div`
   padding: 1em;
   margin-top: 0.4em;
-  /* background-color: blue; */
 `
 
 export default TopSongs

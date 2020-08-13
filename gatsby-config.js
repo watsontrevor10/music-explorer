@@ -2,7 +2,7 @@ require("dotenv").config()
 
 module.exports = {
   siteMetadata: {
-    title: `Trevor's Music Explorer`,
+    title: `Spotify Music Explorer`,
     description: `I listen to a lot of music, here are the things I'm listening to.`,
     author: `Trevor Watson`,
   },
